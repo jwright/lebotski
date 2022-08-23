@@ -9,6 +9,19 @@ defmodule Lebotski.Users do
   alias Lebotski.Users.User
 
   @doc """
+  Returns the total number of users.
+
+  ## Examples
+
+      iex> count_users()
+      24
+
+  """
+  def count_users do
+    Repo.aggregate(User, :count, :id)
+  end
+
+  @doc """
   Returns the list of users.
 
   ## Examples

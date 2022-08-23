@@ -6,23 +6,36 @@ defmodule Lebotski.UsersTest do
   alias Lebotski.Users
   alias Lebotski.Users.User
 
-  describe "list_users/0" do
+  describe "change_user/1" do
     setup do
       [user: insert(:user)]
     end
 
-    test "returns all users", %{user: user} do
-      assert Users.list_users() == [user]
+    test "returns a user changeset", %{user: user} do
+      assert %Ecto.Changeset{} = Users.change_user(user)
     end
   end
 
-  describe "get_user!/1" do
+  describe "count_users/0" do
+    setup do
+      insert(:user)
+      insert(:user)
+      :ok
+    end
+
+    test "returns the total count of users" do
+      assert Users.count_users() == 2
+    end
+  end
+
+  describe "delete_user/1" do
     setup do
       [user: insert(:user)]
     end
 
-    test "returns the user with given id", %{user: user} do
-      assert Users.get_user!(user.id) == user
+    test "deletes the user", %{user: user} do
+      assert {:ok, %User{}} = Users.delete_user(user)
+      assert_raise Ecto.NoResultsError, fn -> Users.get_user!(user.id) end
     end
   end
 
@@ -37,6 +50,26 @@ defmodule Lebotski.UsersTest do
 
     test "with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Users.create_user(params_for(:user, external_id: ""))
+    end
+  end
+
+  describe "get_user!/1" do
+    setup do
+      [user: insert(:user)]
+    end
+
+    test "returns the user with given id", %{user: user} do
+      assert Users.get_user!(user.id) == user
+    end
+  end
+
+  describe "list_users/0" do
+    setup do
+      [user: insert(:user)]
+    end
+
+    test "returns all users", %{user: user} do
+      assert Users.list_users() == [user]
     end
   end
 
@@ -57,27 +90,6 @@ defmodule Lebotski.UsersTest do
                Users.update_user(user, params_for(:user, platform: :blah))
 
       assert user == Users.get_user!(user.id)
-    end
-  end
-
-  describe "delete_user/1" do
-    setup do
-      [user: insert(:user)]
-    end
-
-    test "deletes the user", %{user: user} do
-      assert {:ok, %User{}} = Users.delete_user(user)
-      assert_raise Ecto.NoResultsError, fn -> Users.get_user!(user.id) end
-    end
-  end
-
-  describe "change_user/1" do
-    setup do
-      [user: insert(:user)]
-    end
-
-    test "returns a user changeset", %{user: user} do
-      assert %Ecto.Changeset{} = Users.change_user(user)
     end
   end
 end
