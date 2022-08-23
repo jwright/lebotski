@@ -1,0 +1,23 @@
+display_information:
+  name: lebotski
+  description: Really ties Slack together
+  background_color: "#c55100"
+features:
+  bot_user:
+    display_name: lebotski
+    always_online: true
+  slash_commands:
+    - command: /abide
+      url: https://lebotski-development.ngrok.io/slack/commands
+      description: Find a pharmacy
+      should_escape: true
+oauth_config:
+  redirect_urls:
+    - https://lebotski-development.ngrok.io/auth/slack/callback
+  scopes:
+    bot:
+      - commands
+settings:
+  org_deploy_enabled: false
+  socket_mode_enabled: false
+  token_rotation_enabled: false
