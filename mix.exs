@@ -4,7 +4,7 @@ defmodule Lebotski.MixProject do
   def project do
     [
       app: :lebotski,
-      version: "0.1.0",
+      version: version(),
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers(),
@@ -66,5 +66,10 @@ defmodule Lebotski.MixProject do
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.deploy": ["esbuild default --minify", "phx.digest"]
     ]
+  end
+
+  defp version do
+    {:ok, release_version} = File.read('./VERSION')
+    String.trim(release_version)
   end
 end
