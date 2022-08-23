@@ -4,7 +4,7 @@ defmodule Lebotski.TeamsTest do
   import Lebotski.Factory
 
   alias Lebotski.Teams
-  alias Lebotski.Teams.Team
+  alias Lebotski.Teams.{Team, Teammate}
 
   describe "change_team/1" do
     setup do
@@ -39,6 +39,17 @@ defmodule Lebotski.TeamsTest do
     end
   end
 
+  describe "delete_teammate/1" do
+    setup do
+      [teammate: insert(:teammate)]
+    end
+
+    test "deletes the teammate", %{teammate: teammate} do
+      assert {:ok, %Teammate{}} = Teams.delete_teammate(teammate)
+      assert_raise Ecto.NoResultsError, fn -> Teams.get_teammate!(teammate.id) end
+    end
+  end
+
   describe "create_team/1" do
     test "with valid data creates a team" do
       params = params_for(:team)
@@ -60,6 +71,19 @@ defmodule Lebotski.TeamsTest do
 
     test "returns the team with given id", %{team: team} do
       assert Teams.get_team!(team.id) == team
+    end
+  end
+
+  describe "get_teammate!/1" do
+    setup do
+      [teammate: insert(:teammate)]
+    end
+
+    test "returns the teammate with given id", %{teammate: teammate} do
+      actual = Teams.get_teammate!(teammate.id)
+
+      assert actual.team_id == teammate.team_id
+      assert actual.user_id == teammate.user_id
     end
   end
 
