@@ -6,11 +6,11 @@ defmodule Lebotski.Teams.Team do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @platforms [:slack]
+  alias Lebotski.Platform
 
   schema "teams" do
     field :external_id, :string
-    field :platform, Ecto.Enum, values: @platforms
+    field :platform, Ecto.Enum, values: Platform.supported()
 
     timestamps()
   end
