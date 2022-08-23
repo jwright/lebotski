@@ -35,6 +35,19 @@ defmodule Lebotski.Teams do
   end
 
   @doc """
+  Returns the total number of teammates.
+
+  ## Examples
+
+      iex> count_teammates()
+      3
+
+  """
+  def count_teammates do
+    Repo.aggregate(Teammate, :count, :id)
+  end
+
+  @doc """
   Creates a team.
 
   ## Examples

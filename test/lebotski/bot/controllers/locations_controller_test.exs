@@ -6,6 +6,7 @@ defmodule Lebotski.Bot.Controllers.LocationsControllerTest do
 
   def user_count, do: Users.count_users()
   def team_count, do: Teams.count_teams()
+  def teammate_count, do: Teams.count_teammates()
 
   describe "pharmacies/1 with a valid request" do
     setup %{conn: conn} do
@@ -55,6 +56,25 @@ defmodule Lebotski.Bot.Controllers.LocationsControllerTest do
 
       assert team.platform == :slack
       assert team.external_id == "T12345"
+    end
+
+    test "creates a teammate", %{context: context} do
+      previous_teammate_count = teammate_count()
+
+      assert {:ok, _context} = LocationsController.pharmacies(context)
+      assert previous_teammate_count + 1 == teammate_count()
+
+      teammate =
+        Teams.Teammate
+        |> Ecto.Query.last()
+        |> Repo.one()
+
+      team =
+        Teams.Team
+        |> Ecto.Query.last()
+        |> Repo.one()
+
+      assert teammate.team_id == team.id
     end
   end
 end
