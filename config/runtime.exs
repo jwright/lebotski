@@ -20,6 +20,10 @@ if System.get_env("PHX_SERVER") do
   config :lebotski, LebotskiWeb.Endpoint, server: true
 end
 
+if config_env() == :test do
+  System.put_env("YELP_API_KEY", "blah")
+end
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||
