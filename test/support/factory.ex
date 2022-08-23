@@ -3,5 +3,6 @@ defmodule Lebotski.Factory do
 
   use ExMachina.Ecto, repo: Lebotski.Repo
 
+  use Lebotski.Teams.TeamFactory
   use Lebotski.Users.UserFactory
 end
