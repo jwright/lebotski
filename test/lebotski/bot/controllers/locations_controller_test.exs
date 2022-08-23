@@ -74,7 +74,13 @@ defmodule Lebotski.Bot.Controllers.LocationsControllerTest do
         |> Ecto.Query.last()
         |> Repo.one()
 
+      user =
+        Users.User
+        |> Ecto.Query.last()
+        |> Repo.one()
+
       assert teammate.team_id == team.id
+      assert teammate.user_id == user.id
     end
   end
 end
