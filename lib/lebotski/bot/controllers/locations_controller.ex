@@ -2,9 +2,19 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
   use Juvet.Controller
 
   alias Juvet.Router.Response
+  alias Lebotski.Users
 
-  def pharmacies(%{request: %{params: params}} = context) do
+  def pharmacies(%{request: %{params: params, platform: platform}} = context) do
+    {:ok, _user} = Users.create_user(%{external_id: params["user_id"], platform: platform})
+
+    # TODO: Check for an address
+    # If no address, check for a last one in the database
+    # If there are none, send an error back
+    # else send back calculating...
     context = send_response(context, Response.new(body: %{text: "Gotcha!"}))
+
+    # Geocode the address
+    # Use the weedmaps API to find based on lat/long
 
     {:ok, context}
   end
