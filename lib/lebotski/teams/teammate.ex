@@ -21,4 +21,6 @@ defmodule Lebotski.Teams.Teammate do
     |> cast_assoc(:user)
     |> validate_required([:team_id, :user_id])
   end
+
+  def preloads, do: [:team, :user]
 end
