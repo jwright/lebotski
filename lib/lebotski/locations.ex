@@ -52,6 +52,7 @@ defmodule Lebotski.Locations do
   def find_or_create_last_location(address, teammate) do
     case address do
       nil -> {:ok, find_last_location(teammate)}
+      "" -> {:ok, find_last_location(teammate)}
       address -> create_location(%{address: address, teammate_id: teammate.id})
     end
   end
