@@ -55,6 +55,32 @@ defmodule Lebotski.LocationsTest do
     end
   end
 
+  describe "find_or_create_last_location/2" do
+    setup do
+      [address: Faker.Address.street_address(), teammate: insert(:teammate)]
+    end
+
+    test "with an address creates a location for the teammate", %{
+      address: address,
+      teammate: teammate
+    } do
+      assert {:ok, location} = Locations.find_or_create_last_location(address, teammate)
+      assert location.address == address
+      assert location.teammate_id == teammate.id
+    end
+
+    test "with a nil address returns the last location", %{teammate: teammate} do
+      expected = insert(:location, teammate: teammate)
+
+      assert {:ok, location} = Locations.find_or_create_last_location(nil, teammate)
+      assert location == expected
+    end
+
+    test "with a nil address returns nil if there are no locations", %{teammate: teammate} do
+      assert {:ok, nil} = Locations.find_or_create_last_location(nil, teammate)
+    end
+  end
+
   describe "get_location!/1" do
     setup do
       [location: insert(:location)]

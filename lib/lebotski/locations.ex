@@ -37,6 +37,46 @@ defmodule Lebotski.Locations do
   end
 
   @doc """
+  Finds or creates a `Location` based on the `address` provided. If there is an address provided,
+  then a new Location is created for the specified `teammate`, else the last known location is returned.
+
+  ## Examples
+
+      iex> find_or_create_last_location("123 Main St.", %Teammate{id: 123})
+      {:ok, %Location{id: 1234, teammate_id: 123, address: "123 Main St."}}
+
+      iex> find_or_create_last_location(nil, teammate)
+      {:ok, nil}
+
+  """
+  def find_or_create_last_location(address, teammate) do
+    case address do
+      nil -> {:ok, find_last_location(teammate)}
+      address -> create_location(%{address: address, teammate_id: teammate.id})
+    end
+  end
+
+  @doc """
+  Finds the last known address provided for the `teammate`.
+
+  ## Examples
+
+      iex> find_last_location(%Teammate{id: 123})
+      %Location{id: 1234, teammate_id: 123, address: "123 Main St."}
+
+      iex> find_last_location(teammate)
+      nil
+
+  """
+  def find_last_location(%{id: teammate_id}) do
+    Location
+    |> where([l], l.teammate_id == ^teammate_id)
+    |> last(:inserted_at)
+    |> Repo.one()
+    |> Repo.preload(Location.preloads())
+  end
+
+  @doc """
   Gets a single location.
 
   Raises `Ecto.NoResultsError` if the Location does not exist.
