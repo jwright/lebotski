@@ -3,8 +3,8 @@ defmodule Lebotski.Repo.Migrations.CreateTeammates do
 
   def change do
     create table(:teammates) do
-      add :user_id, references(:users, on_delete: :nothing)
-      add :team_id, references(:teams, on_delete: :nothing)
+      add :user_id, references(:users, on_delete: :delete_all)
+      add :team_id, references(:teams, on_delete: :delete_all)
 
       timestamps()
     end
