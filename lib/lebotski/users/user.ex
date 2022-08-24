@@ -12,6 +12,8 @@ defmodule Lebotski.Users.User do
     field :external_id, :string
     field :platform, Ecto.Enum, values: Platform.supported()
 
+    has_many :teammates, Lebotski.Teams.Teammate
+
     timestamps()
   end
 
