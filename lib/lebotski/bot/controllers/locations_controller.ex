@@ -1,12 +1,15 @@
 defmodule Lebotski.Bot.Controllers.LocationsController do
   use Juvet.Controller
 
-  alias Lebotski.{Teams, Users}
+  alias Lebotski.{Locations, Teams, Users}
 
   def pharmacies(%{request: %{params: params, platform: platform}} = context) do
     {:ok, user} = Users.create_user(%{external_id: params["user_id"], platform: platform})
     {:ok, team} = Teams.create_team(%{external_id: params["team_id"], platform: platform})
-    {:ok, _teammate} = Teams.create_teammate(%{team_id: team.id, user_id: user.id})
+    {:ok, teammate} = Teams.create_teammate(%{team_id: team.id, user_id: user.id})
+
+    {:ok, _location} =
+      Locations.create_location(%{address: params["text"], teammate_id: teammate.id})
 
     # TODO: Check for an address
     # If no address, check for a last one in the database
