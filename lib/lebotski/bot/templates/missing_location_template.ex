@@ -1,5 +1,5 @@
 defmodule Lebotski.Bot.Templates.MissingLocationTemplate do
-  def to_message(params \\ %{}) do
+  def to_message(_params \\ %{}) do
     %{
       blocks: [
         %{

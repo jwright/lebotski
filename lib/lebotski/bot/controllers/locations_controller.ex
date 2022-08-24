@@ -2,7 +2,7 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
   use Juvet.Controller
 
   alias Lebotski.{Locations, Teams}
-  alias Lebotski.Bot.Templates.MissingLocationTemplate
+  alias Lebotski.Bot.Templates.{MissingLocationTemplate, SearchingLocationsTemplate}
 
   def pharmacies(%{request: %{params: params, platform: platform}} = context) do
     with {:ok, _team, _user, teammate} <-
@@ -33,8 +33,8 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
   end
 
   defp start_location_response(_location, context) do
-    context = send_response(context, %{text: "Calculating..."})
-
-    {:ok, context}
+    context
+    |> send_response(SearchingLocationsTemplate.to_message())
+    |> controller_response()
   end
 end
