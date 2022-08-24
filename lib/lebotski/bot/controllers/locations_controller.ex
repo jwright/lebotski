@@ -1,7 +1,7 @@
 defmodule Lebotski.Bot.Controllers.LocationsController do
   use Juvet.Controller
 
-  alias Lebotski.{Locations, Teams}
+  alias Lebotski.{Categories, Locations, Teams}
   alias Lebotski.Bot.Templates.{MissingLocationTemplate, SearchingLocationsTemplate}
 
   def pharmacies(%{request: %{params: params, platform: platform}} = context) do
@@ -32,9 +32,14 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
     |> controller_response()
   end
 
-  defp start_location_response(_location, context) do
+  defp start_location_response(%{address: address}, context) do
     context
-    |> send_response(SearchingLocationsTemplate.to_message())
+    |> send_response(
+      SearchingLocationsTemplate.to_message(%{
+        term: Categories.pharmacy().description,
+        location: address
+      })
+    )
     |> controller_response()
   end
 end
