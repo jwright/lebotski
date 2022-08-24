@@ -1,1 +1,2 @@
 export SLACK_SIGNING_SECRET=
+export YELP_API_KEY=

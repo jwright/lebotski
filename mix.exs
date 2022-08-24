@@ -20,7 +20,7 @@ defmodule Lebotski.MixProject do
   def application do
     [
       mod: {Lebotski.Application, []},
-      extra_applications: [:logger, :runtime_tools, :juvet]
+      extra_applications: [:logger, :runtime_tools, :juvet, :yelp_ex]
     ]
   end
 
@@ -49,7 +49,10 @@ defmodule Lebotski.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:juvet, git: "https://github.com/juvet/juvet.git", branch: "main"}
+      {:ex_machina, "~> 2.7", only: :test},
+      {:faker, "~> 0.17", only: :test},
+      {:juvet, git: "https://github.com/juvet/juvet.git", branch: "main"},
+      {:yelp_ex, "~> 0.2.0"}
     ]
   end
 
