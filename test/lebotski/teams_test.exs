@@ -64,6 +64,57 @@ defmodule Lebotski.TeamsTest do
     end
   end
 
+  describe "find_or_create_team_with_teammate/3" do
+    setup do
+      [platform: :slack, team_id: "T12345", user_id: "U12345"]
+    end
+
+    test "creates the team if it does not exist", %{
+      platform: platform,
+      team_id: team_id,
+      user_id: user_id
+    } do
+      assert {:ok, team, _user, _teammate} =
+               Teams.find_or_create_team_with_teammate(platform, team_id, user_id)
+
+      assert team.platform == platform
+      assert team.external_id == team_id
+    end
+
+    test "finds the team if it does exist", %{
+      platform: platform,
+      team_id: team_id,
+      user_id: user_id
+    } do
+      expected = insert(:team, %{platform: platform, external_id: team_id})
+
+      assert {:ok, actual, _user, _teammate} =
+               Teams.find_or_create_team_with_teammate(platform, team_id, user_id)
+
+      assert expected == actual
+    end
+
+    test "returns an error changeset if the team is invalid", %{
+      platform: platform,
+      user_id: user_id
+    } do
+      assert {:error, %Ecto.Changeset{}} =
+               Teams.find_or_create_team_with_teammate(platform, "", user_id)
+    end
+
+    test "creates the user if it does not exist", %{
+      platform: platform,
+      team_id: team_id,
+      user_id: user_id
+    } do
+      assert {:ok, _team, user, _teammate} =
+               Teams.find_or_create_team_with_teammate(platform, team_id, user_id)
+
+      assert user.platform == platform
+      assert user.external_id == user_id
+    end
+  end
+
   describe "get_team!/1" do
     setup do
       [team: insert(:team)]
