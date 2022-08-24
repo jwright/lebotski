@@ -6,14 +6,22 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
   def pharmacies(%{request: %{params: params, platform: platform}} = context) do
     with {:ok, _team, _user, teammate} <-
            Teams.find_or_create_team_with_teammate(platform, params["team_id"], params["user_id"]),
-         {:ok, _location} <-
-           Locations.create_location(%{address: params["text"], teammate_id: teammate.id}) do
-      # TODO: Check for an address
-      # If no address, check for a last one in the database
-      # If there are none, send an error back
-      # else send back calculating...
-      context = send_response(context, Juvet.Router.Response.new(body: %{text: "Gotcha!"}))
+         {:ok, location} <-
+           Locations.find_or_create_last_location(params["text"], teammate) do
+      case location do
+        nil -> send_missing_location_response(context)
+        location -> start_location_response(location, context)
+      end
+    else
+      _ -> send_error_response(context)
     end
+  end
+
+  defp send_error_response(context), do: {:ok, context}
+  defp send_missing_location_response(context), do: {:ok, context}
+
+  defp start_location_response(_location, context) do
+    context = send_response(context, Juvet.Router.Response.new(body: %{text: "Calculating..."}))
 
     {:ok, context}
   end
