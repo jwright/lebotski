@@ -1,6 +1,8 @@
 defmodule Lebotski.Bot.Controllers.LocationsControllerTest do
   use LebotskiWeb.ConnCase, async: true
 
+  import Lebotski.Factory
+
   alias Lebotski.{Locations, Repo, Teams, Users}
   alias Lebotski.Bot.Controllers.LocationsController
 
@@ -57,6 +59,22 @@ defmodule Lebotski.Bot.Controllers.LocationsControllerTest do
 
       assert team.platform == :slack
       assert team.external_id == "T12345"
+    end
+
+    test "with an existing team uses that team", %{context: context} do
+      expected = insert(:team, external_id: context.request.params["team_id"])
+
+      previous_team_count = team_count()
+
+      assert {:ok, _context} = LocationsController.pharmacies(context)
+      assert previous_team_count == team_count()
+
+      actual =
+        Teams.Team
+        |> Ecto.Query.last()
+        |> Repo.one()
+
+      assert expected == actual
     end
 
     test "creates a teammate", %{context: context} do
