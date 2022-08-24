@@ -208,7 +208,8 @@ defmodule Lebotski.Teams do
   """
   def find_or_create_team_with_teammate(platform, team_id, user_id) do
     with {:ok, team} <- find_or_create_team(platform, team_id),
-         {:ok, user, teammate} <- find_or_create_user_on_team(user_id, team) do
+         {:ok, user, teammate} <-
+           find_or_create_user_on_team(user_id, team) do
       {:ok, team, user, teammate}
     else
       {:error, changeset} -> {:error, changeset}
@@ -243,6 +244,7 @@ defmodule Lebotski.Teams do
     |> where([_tm, u, _t], u.external_id == ^user_id)
     |> where([_tm, _u, t], t.id == ^team_id)
     |> Repo.one(opts)
+    |> Repo.preload(Teammate.preloads())
   end
 
   @doc """
