@@ -3,8 +3,11 @@ defmodule Lebotski.Locations.LocationSearcher do
 
   @result_limit "10"
 
-  def search(%Location{} = location, opts \\ []),
-    do: client().search(search_options(location, opts))
+  def search(%Location{} = location, opts \\ []) do
+    case client().search(search_options(location, opts)) do
+      {:ok, response} -> Poison.decode(response)
+    end
+  end
 
   defp categories(category: category), do: [category]
   defp categories(_), do: []
