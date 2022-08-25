@@ -51,6 +51,7 @@ defmodule Lebotski.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:ex_machina, "~> 2.7", only: :test},
       {:faker, "~> 0.17", only: :test},
+      {:inflex, "~> 2.0.0"},
       {:juvet, git: "https://github.com/juvet/juvet.git", branch: "main"},
       {:yelp_ex, "~> 0.2.0"}
     ]
