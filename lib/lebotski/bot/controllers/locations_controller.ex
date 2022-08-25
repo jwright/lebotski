@@ -44,8 +44,8 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
   end
 
   defp send_search_results_response(context, category, location) do
-    case Locations.search(location, category: category) do
-      {:ok, results} -> send_search_results(context, category, results)
+    case Locations.search(location, category: category.name) do
+      {:ok, results} -> send_search_results(context, category.description, location, results)
       {:error, error} -> IO.inspect(error, label: "error")
     end
 
@@ -55,10 +55,11 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
   defp send_search_results(
          %{request: %{params: params}, team: %{access_token: access_token}},
          category,
+         location,
          results
        ) do
     post_message(
-      SearchResultsTemplate.to_message(%{category: category, results: results}),
+      SearchResultsTemplate.to_message(%{category: category, location: location, results: results}),
       %{channel: params["channel_id"], token: access_token}
     )
   end
@@ -71,7 +72,7 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
         location: address
       })
     )
-    |> send_search_results_response(Categories.pharmacy().name, location)
+    |> send_search_results_response(Categories.pharmacy(), location)
     |> controller_response()
   end
 end
