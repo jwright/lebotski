@@ -1,14 +1,22 @@
 defmodule Lebotski.Bot.Controllers.LocationsController do
   use Juvet.Controller
 
+  alias Juvet.SlackAPI
   alias Lebotski.{Categories, Locations, Teams}
-  alias Lebotski.Bot.Templates.{MissingLocationTemplate, SearchingLocationsTemplate}
+
+  alias Lebotski.Bot.Templates.{
+    MissingLocationTemplate,
+    SearchingLocationsTemplate,
+    SearchResultsTemplate
+  }
 
   def pharmacies(%{request: %{params: params, platform: platform}} = context) do
-    with {:ok, _team, _user, teammate} <-
+    with {:ok, team, _user, teammate} <-
            Teams.find_or_create_team_with_teammate(platform, params["team_id"], params["user_id"]),
          {:ok, location} <-
            Locations.find_or_create_last_location(params["text"], teammate) do
+      context = context |> Map.put(:team, team)
+
       case location do
         nil -> send_missing_location_response(context)
         location -> start_location_response(location, context)
@@ -19,6 +27,9 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
   end
 
   defp controller_response(context, elem \\ :ok), do: {elem, context}
+
+  defp post_message(message, options \\ %{}),
+    do: SlackAPI.Chat.post_message(Map.merge(message, options))
 
   defp send_error_response(context) do
     context = send_response(context, %{text: "Some error occured!"})
@@ -32,7 +43,27 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
     |> controller_response()
   end
 
-  defp start_location_response(%{address: address}, context) do
+  defp send_search_results_response(context, category, location) do
+    case Locations.search(location, category: category) do
+      {:ok, results} -> send_search_results(context, category, results)
+      {:error, error} -> IO.inspect(error, label: "error")
+    end
+
+    context
+  end
+
+  defp send_search_results(
+         %{request: %{params: params}, team: %{access_token: access_token}},
+         category,
+         results
+       ) do
+    post_message(
+      SearchResultsTemplate.to_message(%{category: category, results: results}),
+      %{channel: params["channel_id"], token: access_token}
+    )
+  end
+
+  defp start_location_response(%{address: address} = location, context) do
     context
     |> send_response(
       SearchingLocationsTemplate.to_message(%{
@@ -40,6 +71,7 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
         location: address
       })
     )
+    |> send_search_results_response(Categories.pharmacy().name, location)
     |> controller_response()
   end
 end

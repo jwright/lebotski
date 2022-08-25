@@ -4,7 +4,7 @@ defmodule Lebotski.Locations.LocationSearcher do
   @result_limit "10"
 
   def search(%Location{} = location, opts \\ []),
-    do: client().search(search_options(location, opts) |> IO.inspect(label: "search_options"))
+    do: client().search(search_options(location, opts))
 
   defp categories(category: category), do: [category]
   defp categories(_), do: []
