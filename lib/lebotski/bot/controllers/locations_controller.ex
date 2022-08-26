@@ -28,9 +28,6 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
 
   defp controller_response(context, elem \\ :ok), do: {elem, context}
 
-  defp post_message(message, options \\ %{}),
-    do: SlackAPI.Chat.post_message(Map.merge(message, options))
-
   defp send_error_response(context) do
     context = send_response(context, %{text: "Some error occured!"})
 
@@ -53,18 +50,21 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
   end
 
   defp send_search_results(
-         %{request: %{params: params}, team: %{access_token: access_token}},
+         %{request: %{params: params}},
          category,
          location,
          results
        ) do
-    post_message(
-      SearchResultsTemplate.to_message(%{category: category, location: location, results: results}),
-      %{channel: params["channel_id"], token: access_token}
+    send_response(
+      params["response_url"],
+      SearchResultsTemplate.to_message(%{category: category, location: location, results: results})
     )
   end
 
-  defp start_location_response(%{address: address} = location, context) do
+  defp start_location_response(
+         %{address: address} = location,
+         context
+       ) do
     context
     |> send_response(
       SearchingLocationsTemplate.to_message(%{
