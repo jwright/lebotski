@@ -1,7 +1,6 @@
 defmodule Lebotski.Bot.Controllers.LocationsController do
   use Juvet.Controller
 
-  alias Juvet.SlackAPI
   alias Lebotski.{Categories, Locations, Teams}
 
   alias Lebotski.Bot.Templates.{
