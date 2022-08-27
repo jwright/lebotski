@@ -58,7 +58,7 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
   defp send_search_results_response(context, category, location) do
     case Locations.search(location, category: category.name) do
       {:ok, %{"error" => %{"description" => error}}} -> send_error_response(context, error)
-      {:ok, results} -> send_search_results(context, category.description, location, results)
+      {:ok, results} -> send_search_results(context, category, location, results)
       {:error, error} -> send_error_response(context, error)
     end
 
