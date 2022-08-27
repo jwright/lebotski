@@ -12,6 +12,8 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
 
   def bowling_alleys(context), do: send_location_response(context, Categories.bowling_alley())
 
+  def cocktail_bars(context), do: send_location_response(context, Categories.cocktail_bar())
+
   def pharmacies(context), do: send_location_response(context, Categories.pharmacy())
 
   defp send_location_response(context, category) do
