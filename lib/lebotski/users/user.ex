@@ -8,6 +8,13 @@ defmodule Lebotski.Users.User do
 
   alias Lebotski.Platform
 
+  @type t :: %__MODULE__{
+          external_id: String.t(),
+          platform: Lebotski.Platform.t(),
+          inserted_at: DateTime.t(),
+          updated_at: DateTime.t()
+        }
+
   schema "users" do
     field :external_id, :string
     field :platform, Ecto.Enum, values: Platform.supported()

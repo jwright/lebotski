@@ -1,5 +1,5 @@
 defmodule Lebotski.Bot.Templates.MissingLocationTemplate do
-  def to_message(_params \\ %{}) do
+  def to_message(%{command: command}) do
     %{
       blocks: [
         %{
@@ -32,7 +32,7 @@ defmodule Lebotski.Bot.Templates.MissingLocationTemplate do
           text: %{
             type: "mrkdwn",
             text:
-              "I don't know where to search, man. You never gave me a location.\n\nTry something like `/abide Los Angeles, the city of Angels`"
+              "I don't know where to search, man. You never gave me a location.\n\nTry something like `#{command} Los Angeles`"
           },
           accessory: %{
             type: "image",

@@ -10,33 +10,46 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
     SearchResultsTemplate
   }
 
-  def pharmacies(%{request: %{params: params, platform: platform}} = context) do
+  def bowling_alleys(context), do: send_location_response(context, Categories.bowling_alley())
+
+  def pharmacies(context), do: send_location_response(context, Categories.pharmacy())
+
+  defp send_location_response(context, category) do
+    case find_or_create_location_for_teammate(context) do
+      {:ok, context, location} -> start_location_response(context, category, location)
+      {:error, context, nil} -> send_missing_location_response(context)
+      _ -> send_error_response(context, "Something went wrong. Try again.")
+    end
+  end
+
+  defp find_or_create_location_for_teammate(
+         %{request: %{params: params, platform: platform}} = context
+       ) do
     with {:ok, team, _user, teammate} <-
            Teams.find_or_create_team_with_teammate(platform, params["team_id"], params["user_id"]),
          {:ok, location} <-
            Locations.find_or_create_last_location(params["text"], teammate) do
       context = context |> Map.put(:team, team)
-
-      case location do
-        nil -> send_missing_location_response(context)
-        location -> start_location_response(location, context)
-      end
+      {:ok, context, location}
     else
-      _ -> send_error_response(context, "Something went wrong. Try again.")
+      _ -> {:error, context, nil}
     end
   end
 
   defp controller_response(context, elem \\ :ok), do: {elem, context}
 
   defp send_error_response(%{request: %{params: params}} = context, error) do
-    send_response(params["response_url"], SearchingErrorTemplate.to_message(%{error: error}))
+    send_response(
+      params["response_url"],
+      SearchingErrorTemplate.to_message(%{command: params["command"], error: error})
+    )
 
     {:ok, context}
   end
 
-  defp send_missing_location_response(context) do
+  defp send_missing_location_response(%{request: %{params: params}} = context) do
     context
-    |> send_response(MissingLocationTemplate.to_message())
+    |> send_response(MissingLocationTemplate.to_message(%{command: params["command"]}))
     |> controller_response()
   end
 
@@ -63,17 +76,18 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
   end
 
   defp start_location_response(
-         %{address: address} = location,
-         context
+         context,
+         category,
+         %{address: address} = location
        ) do
     context
     |> send_response(
       SearchingLocationsTemplate.to_message(%{
-        term: Categories.pharmacy().description,
+        term: category.description,
         location: address
       })
     )
-    |> send_search_results_response(Categories.pharmacy(), location)
+    |> send_search_results_response(category, location)
     |> controller_response()
   end
 end

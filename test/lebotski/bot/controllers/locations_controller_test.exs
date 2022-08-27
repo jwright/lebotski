@@ -1,7 +1,8 @@
 defmodule Lebotski.Bot.Controllers.LocationsControllerTest do
-  use LebotskiWeb.ConnCase, async: true
+  use LebotskiWeb.ConnCase
 
   import Lebotski.Factory
+  import Mock
 
   alias Lebotski.{Locations, Repo, Teams, Users}
   alias Lebotski.Bot.Controllers.LocationsController
@@ -12,16 +13,22 @@ defmodule Lebotski.Bot.Controllers.LocationsControllerTest do
   def user_count, do: Users.count_users()
 
   describe "pharmacies/1 with a valid request" do
-    setup %{conn: conn} do
+    setup_with_mocks [
+      {Lebotski.Locations.LocationSearcher, [],
+       [search: fn _location, _opts -> {:ok, %{"businesses" => [], "total" => 0}} end]},
+      {HTTPoison, [], [post!: fn "https://example.com/response_url", _response, _opts -> nil end]}
+    ] do
       params = %{
+        "command" => Lebotski.Bot.Commands.Locations.pharmacy(),
         "team_id" => "T12345",
         "text" => "West Bromwich",
         "user_id" => "U12345",
-        "username" => "robert"
+        "username" => "robert",
+        "response_url" => "https://example.com/response_url"
       }
 
       context = %{
-        conn: conn,
+        conn: build_conn(),
         request: %{
           params: params,
           platform: :slack

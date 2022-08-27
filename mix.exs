@@ -53,6 +53,7 @@ defmodule Lebotski.MixProject do
       {:faker, "~> 0.17", only: :test},
       {:inflex, "~> 2.0.0"},
       {:juvet, git: "https://github.com/juvet/juvet.git", branch: "main"},
+      {:mock, "~> 0.3.0", only: :test},
       {:yelp_ex, "~> 0.2.0"}
     ]
   end
