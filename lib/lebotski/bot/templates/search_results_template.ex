@@ -34,7 +34,8 @@ defmodule Lebotski.Bot.Templates.SearchResultsTemplate do
             type: "section",
             text: %{
               type: "mrkdwn",
-              text: "Found #{results["total"]} #{category.description} near #{location.address}."
+              text:
+                "Found *#{results["total"]}* #{category.description} near _#{location.address}_."
             },
             accessory: SearchResultsCategoryImage.to_message(category)
           },
