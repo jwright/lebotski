@@ -10,19 +10,35 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
     SearchResultsTemplate
   }
 
+  def bowling_alleys(%{request: %{params: params, platform: platform}} = context) do
+    context
+    |> send_location_response(Categories.bowling_alley())
+  end
+
   def pharmacies(%{request: %{params: params, platform: platform}} = context) do
+    context
+    |> send_location_response(Categories.pharmacy())
+  end
+
+  defp send_location_response(context, category) do
+    case find_or_create_location_for_teammate(context) do
+      {:ok, context, location} -> start_location_response(context, category, location)
+      {:error, context, nil} -> send_missing_location_response(context)
+      _ -> send_error_response(context, "Something went wrong. Try again.")
+    end
+  end
+
+  defp find_or_create_location_for_teammate(
+         %{request: %{params: params, platform: platform}} = context
+       ) do
     with {:ok, team, _user, teammate} <-
            Teams.find_or_create_team_with_teammate(platform, params["team_id"], params["user_id"]),
          {:ok, location} <-
            Locations.find_or_create_last_location(params["text"], teammate) do
       context = context |> Map.put(:team, team)
-
-      case location do
-        nil -> send_missing_location_response(context)
-        location -> start_location_response(location, context)
-      end
+      {:ok, context, location}
     else
-      _ -> send_error_response(context, "Something went wrong. Try again.")
+      _ -> {:error, context, nil}
     end
   end
 
@@ -66,17 +82,18 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
   end
 
   defp start_location_response(
-         %{address: address} = location,
-         context
+         context,
+         category,
+         %{address: address} = location
        ) do
     context
     |> send_response(
       SearchingLocationsTemplate.to_message(%{
-        term: Categories.pharmacy().description,
+        term: category.description,
         location: address
       })
     )
-    |> send_search_results_response(Categories.pharmacy(), location)
+    |> send_search_results_response(category, location)
     |> controller_response()
   end
 end
