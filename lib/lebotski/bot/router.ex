@@ -8,6 +8,10 @@ defmodule Lebotski.Bot.Router do
       to: "lebotski.bot.controllers.locations#bowling_alleys"
     )
 
+    command(Commands.Locations.cocktail_bar(),
+      to: "lebotski.bot.controllers.locations#cocktail_bars"
+    )
+
     command(Commands.Locations.pharmacy(), to: "lebotski.bot.controllers.locations#pharmacies")
   end
 end
