@@ -11,5 +11,6 @@ defmodule Lebotski.Categories do
     end
   end
 
+  def bowling_alley(), do: Category.new("bowling", "Bowling Alleys")
   def pharmacy(), do: Category.new("cannabisdispensaries", "Cannabis Dispensaries")
 end

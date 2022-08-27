@@ -7,7 +7,7 @@ features:
     display_name: lebotski
     always_online: true
   slash_commands:
-    - command: /abide
+    - command: /what-day-is-this
       url: https://lebotski-development.ngrok.io/slack/commands
       description: Find a pharmacy
       should_escape: true

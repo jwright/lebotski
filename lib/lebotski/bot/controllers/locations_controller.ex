@@ -29,14 +29,17 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
   defp controller_response(context, elem \\ :ok), do: {elem, context}
 
   defp send_error_response(%{request: %{params: params}} = context, error) do
-    send_response(params["response_url"], SearchingErrorTemplate.to_message(%{error: error}))
+    send_response(
+      params["response_url"],
+      SearchingErrorTemplate.to_message(%{command: params["command"], error: error})
+    )
 
     {:ok, context}
   end
 
-  defp send_missing_location_response(context) do
+  defp send_missing_location_response(%{request: %{params: params}} = context) do
     context
-    |> send_response(MissingLocationTemplate.to_message())
+    |> send_response(MissingLocationTemplate.to_message(%{command: params["command"]}))
     |> controller_response()
   end
 

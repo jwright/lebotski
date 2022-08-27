@@ -1,5 +1,5 @@
 defmodule Lebotski.Bot.Templates.SearchingErrorTemplate do
-  def to_message(%{error: error}) do
+  def to_message(%{command: command, error: error}) do
     %{
       blocks: [
         %{
@@ -44,7 +44,7 @@ defmodule Lebotski.Bot.Templates.SearchingErrorTemplate do
           type: "section",
           text: %{
             type: "mrkdwn",
-            text: "Try again with another location. (e.g. `/abide Los Angeles, CA`)"
+            text: "Try again with another location. (e.g. `#{command} Los Angeles, CA`)"
           }
         }
       ],
