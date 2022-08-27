@@ -4,10 +4,10 @@ defmodule Lebotski.Bot.Router do
   alias Lebotski.Bot.Commands
 
   platform :slack do
-    command(Commands.Locations.bowling_alleys(),
+    command(Commands.Locations.bowling_alley(),
       to: "lebotski.bot.controllers.locations#bowling_alleys"
     )
 
-    command(Commands.Locations.pharmacies(), to: "lebotski.bot.controllers.locations#pharmacies")
+    command(Commands.Locations.pharmacy(), to: "lebotski.bot.controllers.locations#pharmacies")
   end
 end

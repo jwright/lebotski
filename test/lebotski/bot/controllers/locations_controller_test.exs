@@ -19,7 +19,7 @@ defmodule Lebotski.Bot.Controllers.LocationsControllerTest do
       {HTTPoison, [], [post!: fn "https://example.com/response_url", _response, _opts -> nil end]}
     ] do
       params = %{
-        "command" => Lebotski.Bot.Commands.Locations.pharmacies(),
+        "command" => Lebotski.Bot.Commands.Locations.pharmacy(),
         "team_id" => "T12345",
         "text" => "West Bromwich",
         "user_id" => "U12345",
