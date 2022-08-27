@@ -8,6 +8,7 @@ defmodule Lebotski.Teams.TeamFactory do
       def team_factory(attrs) do
         team = %Team{
           platform: :slack,
+          access_token: Faker.String.base64(10),
           external_id: Faker.String.base64(5)
         }
 

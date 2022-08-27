@@ -9,6 +9,7 @@ defmodule Lebotski.Teams.Team do
   alias Lebotski.Platform
 
   schema "teams" do
+    field :access_token, :string
     field :external_id, :string
     field :platform, Ecto.Enum, values: Platform.supported()
 
@@ -20,7 +21,7 @@ defmodule Lebotski.Teams.Team do
   @doc false
   def changeset(team, attrs) do
     team
-    |> cast(attrs, [:platform, :external_id])
+    |> cast(attrs, [:platform, :access_token, :external_id])
     |> validate_required([:platform, :external_id])
   end
 end

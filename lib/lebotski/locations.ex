@@ -6,7 +6,7 @@ defmodule Lebotski.Locations do
   import Ecto.Query, warn: false
   alias Lebotski.Repo
 
-  alias Lebotski.Locations.Location
+  alias Lebotski.Locations.{Location, LocationSearcher}
 
   @doc """
   Returns the total number of locations.
@@ -52,6 +52,7 @@ defmodule Lebotski.Locations do
   def find_or_create_last_location(address, teammate) do
     case address do
       nil -> {:ok, find_last_location(teammate)}
+      "" -> {:ok, find_last_location(teammate)}
       address -> create_location(%{address: address, teammate_id: teammate.id})
     end
   end
@@ -91,6 +92,8 @@ defmodule Lebotski.Locations do
 
   """
   def get_location!(id), do: Repo.get!(Location, id) |> Repo.preload(Location.preloads())
+
+  def search(%Location{} = location, opts \\ []), do: LocationSearcher.search(location, opts)
 
   @doc """
   Creates a location.
