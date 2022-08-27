@@ -5,6 +5,6 @@ defmodule Lebotski.Bot.Actions.Locations do
 
   def more_info, do: action("more_info")
 
-  defp action(action), do: "#{namespace}.#{action}"
+  defp action(action), do: "#{namespace()}.#{action}"
   defp namespace, do: @namespace
 end
