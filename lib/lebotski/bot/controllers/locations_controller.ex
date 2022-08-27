@@ -10,15 +10,9 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
     SearchResultsTemplate
   }
 
-  def bowling_alleys(%{request: %{params: params, platform: platform}} = context) do
-    context
-    |> send_location_response(Categories.bowling_alley())
-  end
+  def bowling_alleys(context), do: send_location_response(context, Categories.bowling_alley())
 
-  def pharmacies(%{request: %{params: params, platform: platform}} = context) do
-    context
-    |> send_location_response(Categories.pharmacy())
-  end
+  def pharmacies(context), do: send_location_response(context, Categories.pharmacy())
 
   defp send_location_response(context, category) do
     case find_or_create_location_for_teammate(context) do
