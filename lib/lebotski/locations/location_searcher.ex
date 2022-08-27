@@ -1,8 +1,11 @@
 defmodule Lebotski.Locations.LocationSearcher do
-  alias Lebotski.Locations.Location
+  alias Lebotski.Locations.{Location, LocationSearcherBehavior}
+
+  @behaviour LocationSearcherBehavior
 
   @result_limit "10"
 
+  @impl LocationSearcherBehavior
   def search(%Location{} = location, opts \\ []) do
     case client().search(search_options(location, opts)) do
       {:ok, response} -> Poison.decode(response)
