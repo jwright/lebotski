@@ -1,7 +1,7 @@
 display_information:
   name: lebotski
   description: Really ties Slack together
-  background_color: "#c55100"
+  background_color: "#946f5a"
 features:
   bot_user:
     display_name: lebotski
