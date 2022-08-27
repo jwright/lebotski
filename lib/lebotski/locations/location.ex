@@ -8,6 +8,15 @@ defmodule Lebotski.Locations.Location do
 
   alias Lebotski.Teams.Teammate
 
+  @type t :: %__MODULE__{
+          address: String.t(),
+          latitude: float() | nil,
+          longitude: float() | nil,
+          teammate: Teammate.t(),
+          inserted_at: DateTime.t(),
+          updated_at: DateTime.t()
+        }
+
   schema "locations" do
     field :address, :string
     field :latitude, :float

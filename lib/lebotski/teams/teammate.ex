@@ -6,6 +6,13 @@ defmodule Lebotski.Teams.Teammate do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          user: Lebotski.Users.User.t(),
+          team: Lebotski.Teams.Team.t(),
+          inserted_at: DateTime.t(),
+          updated_at: DateTime.t()
+        }
+
   schema "teammates" do
     belongs_to :team, Lebotski.Teams.Team
     belongs_to :user, Lebotski.Users.User

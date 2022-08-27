@@ -8,6 +8,14 @@ defmodule Lebotski.Teams.Team do
 
   alias Lebotski.Platform
 
+  @type t :: %__MODULE__{
+          external_id: String.t(),
+          access_token: String.t() | nil,
+          platform: Lebotski.Platform.t(),
+          inserted_at: DateTime.t(),
+          updated_at: DateTime.t()
+        }
+
   schema "teams" do
     field :access_token, :string
     field :external_id, :string
