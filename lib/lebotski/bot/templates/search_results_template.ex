@@ -1,5 +1,5 @@
 defmodule Lebotski.Bot.Templates.SearchResultsTemplate do
-  alias Lebotski.Bot.Actions
+  alias Lebotski.Bot.{Actions, Templates.SearchResultsCategoryImage}
 
   def to_message(%{category: category, location: location, results: results}) do
     %{
@@ -34,14 +34,10 @@ defmodule Lebotski.Bot.Templates.SearchResultsTemplate do
             type: "section",
             text: %{
               type: "mrkdwn",
-              text: "Found #{results["total"]} #{category} near #{location.address}."
+              text:
+                "Found *#{results["total"]}* #{category.description} near _#{location.address}_."
             },
-            accessory: %{
-              type: "image",
-              image_url:
-                "https://dangerousminds.net/content/uploads/images/made/content/uploads/images/JeffBridges_TBLsdfsdfsdf_465_291_int.jpg",
-              alt_text: "Doo, doo, doo, looking out that backdoor."
-            }
+            accessory: SearchResultsCategoryImage.to_message(category)
           },
           %{
             type: "divider"

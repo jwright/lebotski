@@ -12,6 +12,8 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
 
   def bowling_alleys(context), do: send_location_response(context, Categories.bowling_alley())
 
+  def cocktail_bars(context), do: send_location_response(context, Categories.cocktail_bar())
+
   def pharmacies(context), do: send_location_response(context, Categories.pharmacy())
 
   defp send_location_response(context, category) do
@@ -56,7 +58,7 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
   defp send_search_results_response(context, category, location) do
     case Locations.search(location, category: category.name) do
       {:ok, %{"error" => %{"description" => error}}} -> send_error_response(context, error)
-      {:ok, results} -> send_search_results(context, category.description, location, results)
+      {:ok, results} -> send_search_results(context, category, location, results)
       {:error, error} -> send_error_response(context, error)
     end
 
