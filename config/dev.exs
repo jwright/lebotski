@@ -25,7 +25,7 @@ config :lebotski, LebotskiWeb.Endpoint,
   debug_errors: true,
   secret_key_base: "qeKPZrMwopn67emM19USGnsT4AQj/Z4iH9MrAqmHWB+usp5zbx9uDkCiJvh2jgFP",
   watchers: [
-    # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
+    tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]},
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
   ]
 
