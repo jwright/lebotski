@@ -41,7 +41,7 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
 
   defp controller_response(context, elem \\ :ok), do: {elem, context}
 
-  defp image_url(%{request: request}, image_path) do
+  defp image_url(%{request: request}, image_path \\ nil) do
     request
     |> Juvet.Router.Request.base_url()
     |> URI.parse()
@@ -84,14 +84,19 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
   end
 
   defp send_search_results(
-         %{request: %{params: params}},
+         %{request: %{params: params}} = context,
          category,
          location,
          results
        ) do
     send_response(
       params["response_url"],
-      SearchResultsTemplate.to_message(%{category: category, location: location, results: results})
+      SearchResultsTemplate.to_message(%{
+        category: category,
+        image_url: image_url(context),
+        location: location,
+        results: results
+      })
     )
   end
 

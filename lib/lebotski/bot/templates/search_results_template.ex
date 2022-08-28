@@ -1,7 +1,7 @@
 defmodule Lebotski.Bot.Templates.SearchResultsTemplate do
   alias Lebotski.Bot.{Actions, Templates.SearchResultsCategoryImage}
 
-  def to_message(%{category: category, location: location, results: results}) do
+  def to_message(%{category: category, image_url: image_url, location: location, results: results}) do
     %{
       blocks:
         [
@@ -37,7 +37,7 @@ defmodule Lebotski.Bot.Templates.SearchResultsTemplate do
               text:
                 "Found *#{results["total"]}* #{category.description} near _#{location.address}_."
             },
-            accessory: SearchResultsCategoryImage.to_message(category)
+            accessory: SearchResultsCategoryImage.to_message(image_url, category)
           },
           %{
             type: "divider"
