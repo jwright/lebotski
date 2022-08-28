@@ -1,5 +1,5 @@
 defmodule Lebotski.Bot.Templates.SearchingLocationsTemplate do
-  def to_message(%{location: location, term: term}) do
+  def to_message(%{image_url: image_url, location: location, term: term}) do
     %{
       blocks: [
         %{
@@ -35,7 +35,7 @@ defmodule Lebotski.Bot.Templates.SearchingLocationsTemplate do
           },
           accessory: %{
             type: "image",
-            image_url: "https://pbs.twimg.com/media/DRogcsQXUAA6CgI.jpg",
+            image_url: image_url,
             alt_text: "It's down there somewhere..."
           }
         }

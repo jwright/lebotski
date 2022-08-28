@@ -104,7 +104,8 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
     |> send_response(
       SearchingLocationsTemplate.to_message(%{
         term: category.description,
-        location: address
+        location: address,
+        image_url: image_url(context, "searching.jpg")
       })
     )
     |> send_search_results_response(category, location)
