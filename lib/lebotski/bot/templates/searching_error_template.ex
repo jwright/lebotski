@@ -1,5 +1,5 @@
 defmodule Lebotski.Bot.Templates.SearchingErrorTemplate do
-  def to_message(%{command: command, error: error}) do
+  def to_message(%{command: command, error: error, image_url: image_url}) do
     %{
       blocks: [
         %{
@@ -35,8 +35,7 @@ defmodule Lebotski.Bot.Templates.SearchingErrorTemplate do
           },
           accessory: %{
             type: "image",
-            image_url:
-              "https://static1.srcdn.com/wordpress/wp-content/uploads/the-big-lebowski1.jpg?q=50&fit=crop&w=1500&dpr=1.5",
+            image_url: image_url,
             alt_text: "Rug-pee-ers did not do this man"
           }
         },

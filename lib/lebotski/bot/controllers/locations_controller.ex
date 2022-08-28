@@ -52,7 +52,11 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
   defp send_error_response(%{request: %{params: params}} = context, error) do
     send_response(
       params["response_url"],
-      SearchingErrorTemplate.to_message(%{command: params["command"], error: error})
+      SearchingErrorTemplate.to_message(%{
+        command: params["command"],
+        error: error,
+        image_url: image_url(context, "searching_error.jpg")
+      })
     )
 
     {:ok, context}
