@@ -18,6 +18,7 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
 
   defp send_location_response(context, category) do
     case find_or_create_location_for_teammate(context) do
+      {:ok, context, nil} -> send_missing_location_response(context)
       {:ok, context, location} -> start_location_response(context, category, location)
       {:error, context, nil} -> send_missing_location_response(context)
       _ -> send_error_response(context, "Something went wrong. Try again.")
