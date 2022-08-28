@@ -18,6 +18,7 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
 
   defp send_location_response(context, category) do
     case find_or_create_location_for_teammate(context) do
+      {:ok, context, nil} -> send_missing_location_response(context)
       {:ok, context, location} -> start_location_response(context, category, location)
       {:error, context, nil} -> send_missing_location_response(context)
       _ -> send_error_response(context, "Something went wrong. Try again.")
@@ -40,10 +41,22 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
 
   defp controller_response(context, elem \\ :ok), do: {elem, context}
 
+  defp image_url(%{request: request}, image_path \\ nil) do
+    request
+    |> Juvet.Router.Request.base_url()
+    |> URI.parse()
+    |> URI.merge("/images/#{image_path}")
+    |> to_string()
+  end
+
   defp send_error_response(%{request: %{params: params}} = context, error) do
     send_response(
       params["response_url"],
-      SearchingErrorTemplate.to_message(%{command: params["command"], error: error})
+      SearchingErrorTemplate.to_message(%{
+        command: params["command"],
+        error: error,
+        image_url: image_url(context, "searching_error.jpg")
+      })
     )
 
     {:ok, context}
@@ -51,7 +64,12 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
 
   defp send_missing_location_response(%{request: %{params: params}} = context) do
     context
-    |> send_response(MissingLocationTemplate.to_message(%{command: params["command"]}))
+    |> send_response(
+      MissingLocationTemplate.to_message(%{
+        command: params["command"],
+        image_url: image_url(context, "missing_location.webp")
+      })
+    )
     |> controller_response()
   end
 
@@ -66,14 +84,19 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
   end
 
   defp send_search_results(
-         %{request: %{params: params}},
+         %{request: %{params: params}} = context,
          category,
          location,
          results
        ) do
     send_response(
       params["response_url"],
-      SearchResultsTemplate.to_message(%{category: category, location: location, results: results})
+      SearchResultsTemplate.to_message(%{
+        category: category,
+        image_url: image_url(context),
+        location: location,
+        results: results
+      })
     )
   end
 
@@ -86,7 +109,8 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
     |> send_response(
       SearchingLocationsTemplate.to_message(%{
         term: category.description,
-        location: address
+        location: address,
+        image_url: image_url(context, "searching.jpg")
       })
     )
     |> send_search_results_response(category, location)

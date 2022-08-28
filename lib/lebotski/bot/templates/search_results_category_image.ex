@@ -1,38 +1,24 @@
 defmodule Lebotski.Bot.Templates.SearchResultsCategoryImage do
   alias Lebotski.Categories.Category
 
-  def to_message(%Category{term: :bowling_alley}) do
+  def to_message(base_image_url, %Category{term: term}) do
     %{
       type: "image",
-      image_url: "https://i.ytimg.com/vi/dQctpzuXmUs/maxresdefault.jpg",
-      alt_text: "This is not 'Nam. This is bowling. There are rules.'"
+      image_url: image_url(base_image_url, term),
+      alt_text: alt_text(term)
     }
   end
 
-  def to_message(%Category{term: :cocktail_bar}) do
-    %{
-      type: "image",
-      image_url:
-        "https://focusmicrositesprod.s3.amazonaws.com/assets/uploads/post_marquee_5f19f76b2870d.jpg",
-      alt_text: "Hey, careful man. There's a beverage here!"
-    }
-  end
+  def to_message(base_image_url, _), do: to_message(base_image_url, Category.pharmacy())
 
-  def to_message(%Category{term: :pharmacy}) do
-    %{
-      type: "image",
-      image_url:
-        "https://dangerousminds.net/content/uploads/images/made/content/uploads/images/JeffBridges_TBLsdfsdfsdf_465_291_int.jpg",
-      alt_text: "Doo, doo, doo, looking out that backdoor."
-    }
-  end
+  defp alt_text(:bowling_alley), do: "This is not 'Nam. This is bowling. There are rules."
+  defp alt_text(:cocktail_bar), do: "Hey, careful man. There's a beverage here!"
+  defp alt_text(:pharmacy), do: "Doo, doo, doo, looking out that backdoor."
 
-  def to_message(_) do
-    %{
-      type: "image",
-      image_url:
-        "https://dangerousminds.net/content/uploads/images/made/content/uploads/images/JeffBridges_TBLsdfsdfsdf_465_291_int.jpg",
-      alt_text: "Doo, doo, doo, looking out that backdoor."
-    }
+  defp image_url(base_image_url, category) do
+    base_image_url
+    |> URI.parse()
+    |> URI.merge("#{category}.jpg")
+    |> to_string()
   end
 end

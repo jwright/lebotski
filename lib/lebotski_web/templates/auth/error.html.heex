@@ -1,0 +1,16 @@
+<div class="flex flex-col items-center">
+  <img class="h-96 w-auto" src={Routes.static_path(@conn, "/images/error.jpg")} alt="The Dude and Walter realizing they fucked up"/>
+
+  <div class="border-t-2 border-white mt-4 pt-4">
+    <p class="font-proxima-nova text-white text-2xl">
+      Dammit Walter! Looks like we need more whites.
+    </p>
+    <p class="font-proxima-nova text-white text-lg">
+    There was an error here, man. (<%= @error %>)
+    </p>
+    <p class="font-proxima-nova text-white text-lg">
+      Let's try it again.
+      <%= link raw("&rarr;"), to: Routes.auth_path(@conn, :request, @provider) %>
+    </p>
+  </div>
+</div>

@@ -17,6 +17,9 @@ defmodule LebotskiWeb.Router do
   scope "/", LebotskiWeb do
     pipe_through :browser
 
+    get "/auth/:provider", AuthController, :request
+    get "/auth/:provider/callback", AuthController, :callback
+
     get "/", PageController, :index
   end
 
