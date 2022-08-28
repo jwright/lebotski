@@ -3,6 +3,22 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@font-face {
+  font-family: "LabSansPro";
+  font-style: "bold";
+  font-weight: "bold";
+  src: url("/fonts/LabSansProBold.woff") format("woff"),
+       url("/fonts/LabSansProBold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "ProximaNova";
+  font-style: "normal";
+  font-weight: "normal";
+  src: url("/fonts/ProximaNovaRegular.woff") format("woff"),
+       url("/fonts/ProximaNovaRegular.woff2") format("woff2");
+}
+
 /* LiveView specific classes for your customization */
 .phx-no-feedback.invalid-feedback,
 .phx-no-feedback .invalid-feedback {

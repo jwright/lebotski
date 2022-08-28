@@ -12,9 +12,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'lebotski-brown': '#93705D',
+        'lebotski-brown': '#95705D',
       },
-      fontFamily: {},
+      fontFamily: {
+        'lab-sans': ['LabSansPro', 'sans-serif'],
+        'proxima-nova': ['ProximaNova', 'sans-serif'],
+      },
     },
   },
   plugins: [
