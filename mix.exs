@@ -54,6 +54,7 @@ defmodule Lebotski.MixProject do
       {:inflex, "~> 2.0.0"},
       {:juvet, git: "https://github.com/juvet/juvet.git", branch: "main"},
       {:mock, "~> 0.3.0", only: :test},
+      {:tailwind, "~> 0.1.6", runtime: Mix.env() == :dev},
       {:yelp_ex, "~> 0.2.0"}
     ]
   end
@@ -70,7 +71,7 @@ defmodule Lebotski.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.deploy": ["esbuild default --minify", "phx.digest"]
+      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"]
     ]
   end
 
