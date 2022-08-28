@@ -29,9 +29,12 @@ defmodule Lebotski.Bot.Controllers.LocationsControllerTest do
 
       context = %{
         conn: build_conn(),
-        request: %{
+        request: %Juvet.Router.Request{
+          host: "www.example.com",
           params: params,
-          platform: :slack
+          port: 80,
+          platform: :slack,
+          scheme: :http
         }
       }
 
