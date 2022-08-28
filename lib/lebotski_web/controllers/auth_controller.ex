@@ -8,7 +8,7 @@ defmodule LebotskiWeb.AuthController do
     %{token: token} = get_token!(provider, code)
 
     case find_or_create_account_from_access_token(provider, token) do
-      {:ok, _team, _user, _teammate} -> render(conn, "success.html")
+      {:ok, team, _user, _teammate} -> render(conn, "success.html", bot_url: get_bot_url(team))
       {:error, error} -> render(conn, "error.html", error: error, provider: provider)
     end
   end
@@ -17,7 +17,7 @@ defmodule LebotskiWeb.AuthController do
     do: redirect(conn, external: authorize_url!(provider))
 
   defp authorize_url!("slack"),
-    do: OAuth.Slack.authorize_url!(scope: ["commands"] |> Enum.join(","))
+    do: OAuth.Slack.authorize_url!(scope: ["commands", "team:read"] |> Enum.join(","))
 
   defp find_or_create_account_from_access_token("slack", %{other_params: other_params} = token) do
     case other_params["ok"] do
@@ -37,6 +37,16 @@ defmodule LebotskiWeb.AuthController do
       {:ok, team, user, teammate} ->
         {:ok, team} = Teams.update_team(team, %{access_token: access_token})
         {:ok, team, user, teammate}
+    end
+  end
+
+  defp get_bot_url(%{access_token: access_token, external_id: external_id, platform: :slack}) do
+    case Juvet.SlackAPI.Team.info(%{team: external_id, token: access_token}) do
+      {:ok, %{team: %{domain: domain}}} ->
+        "https://#{domain}.slack.com/messages/#{LebotskiWeb.Endpoint.config(:otp_app)}"
+
+      {:error, _} ->
+        nil
     end
   end
 
