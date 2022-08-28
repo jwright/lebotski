@@ -3,6 +3,6 @@ defmodule LebotskiWeb.PageControllerTest do
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")
-    assert html_response(conn, 200) =~ "<img alt=\"Add to Slack\""
+    assert html_response(conn, 200) =~ Routes.auth_path(conn, :request, :slack)
   end
 end
