@@ -4,7 +4,9 @@
   <div class="border-t-2 border-white mt-4 pt-4">
     <p class="font-proxima-nova text-white text-2xl">
       Far out man. Looks like I am ready for your team.
-      <a href={@bot_url} target="_blank" class="ml-2">&rarr;</a>
+      <%= if @bot_url do %>
+        <a href={@bot_url} target="_blank" class="ml-2">&rarr;</a>
+      <% end %>
     </p>
   </div>
 </div>
