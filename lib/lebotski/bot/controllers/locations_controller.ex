@@ -41,6 +41,14 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
 
   defp controller_response(context, elem \\ :ok), do: {elem, context}
 
+  defp image_url(%{request: request}, image_path) do
+    request
+    |> Juvet.Router.Request.base_url()
+    |> URI.parse()
+    |> URI.merge("/images/#{image_path}")
+    |> to_string()
+  end
+
   defp send_error_response(%{request: %{params: params}} = context, error) do
     send_response(
       params["response_url"],
@@ -52,7 +60,12 @@ defmodule Lebotski.Bot.Controllers.LocationsController do
 
   defp send_missing_location_response(%{request: %{params: params}} = context) do
     context
-    |> send_response(MissingLocationTemplate.to_message(%{command: params["command"]}))
+    |> send_response(
+      MissingLocationTemplate.to_message(%{
+        command: params["command"],
+        image_url: image_url(context, "missing_location.webp")
+      })
+    )
     |> controller_response()
   end
 
