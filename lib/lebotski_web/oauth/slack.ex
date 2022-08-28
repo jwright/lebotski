@@ -20,10 +20,8 @@ defmodule LebotskiWeb.OAuth.Slack do
   end
 
   def get_token!(params \\ []) do
-    OAuth2.Client.get_token!(
-      client(),
-      Keyword.merge(params, client_secret: client().client_secret)
-    )
+    client()
+    |> OAuth2.Client.get_token!(Keyword.merge(params, client_secret: client().client_secret))
   end
 
   # Strategy callbacks
