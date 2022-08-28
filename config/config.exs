@@ -59,6 +59,10 @@ config :juvet,
     signing_secret: System.get_env("SLACK_SIGNING_SECRET")
   ]
 
+config :lebotski, Slack,
+  client_id: System.get_env("SLACK_CLIENT_ID"),
+  client_secret: System.get_env("SLACK_CLIENT_SECRET")
+
 config :tailwind,
   version: "3.1.6",
   default: [
