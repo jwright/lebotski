@@ -29,6 +29,14 @@ config :lebotski, LebotskiWeb.Endpoint,
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
   ]
 
+config :juvet,
+  endpoint: [
+    http: [port: System.get_env("PORT")]
+  ],
+  slack: [
+    signing_secret: System.get_env("SLACK_SIGNING_SECRET")
+  ]
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
