@@ -1,4 +1,5 @@
 defmodule Lebotski.Bot.Templates.SearchResultsCategoryImage do
+  alias Lebotski.Categories
   alias Lebotski.Categories.Category
 
   def to_message(base_image_url, %Category{term: term}) do
@@ -9,7 +10,7 @@ defmodule Lebotski.Bot.Templates.SearchResultsCategoryImage do
     }
   end
 
-  def to_message(base_image_url, _), do: to_message(base_image_url, Category.pharmacy())
+  def to_message(base_image_url, _), do: to_message(base_image_url, Categories.pharmacy())
 
   defp alt_text(:bowling_alley), do: "This is not 'Nam. This is bowling. There are rules."
   defp alt_text(:cocktail_bar), do: "Hey, careful man. There's a beverage here!"
