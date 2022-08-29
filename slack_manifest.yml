@@ -45,23 +45,23 @@ features:
     always_online: true
   slash_commands:
     - command: /what-day-is-this
-      url: https://lebotski-development.ngrok.io/slack/commands
+      url: https://lebotski.com/slack/commands
       description: Find a pharmacy
       usage_hint: location (e.g. Los Angeles)
       should_escape: true
     - command: /not-nam
-      url: https://lebotski-development.ngrok.io/slack/commands
+      url: https://lebotski.com/slack/commands
       description: Find a bowling alley
       usage_hint: location (e.g. Los Angeles)
       should_escape: true
     - command: /beverage-here-man
-      url: https://lebotski-development.ngrok.io/slack/commands
+      url: https://lebotski.com/slack/commands
       description: Find a cocktail bar
       usage_hint: location (e.g. Los Angeles)
       should_escape: true
 oauth_config:
   redirect_urls:
-    - https://lebotski-development.ngrok.io/auth/slack/callback
+    - https://lebotski.com/auth/slack/callback
   scopes:
     bot:
       - commands
