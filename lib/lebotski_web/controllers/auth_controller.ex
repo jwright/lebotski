@@ -31,7 +31,7 @@ defmodule LebotskiWeb.AuthController do
     user_id = other_params |> get_in(["authed_user", "id"])
 
     case Teams.find_or_create_team_with_teammate(:slack, team_id, user_id) do
-      {:error, changeset} ->
+      {:error, _changeset} ->
         {:error, "Could not save account"}
 
       {:ok, team, user, teammate} ->

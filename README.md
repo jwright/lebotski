@@ -69,68 +69,33 @@ mix test
 
 ## DEPLOYMENT
 
-This application is deployed to [Gigalixir](gigalixir.com) using [Distillery](bitwalker/distillery) by following [this guide](https://gigalixir.readthedocs.io/en/latest/modify-app/distillery.html#using-distillery).
+This application is deployed to [Fly](fly.io) using Docker by following [this guide](https://fly.io/docs/getting-started/elixir/).
 
-The application is automatically deployed to production when the following happens:
-
-1. Update the version number in the [VERSION](./VERSION) file.
-2. Merge into the `main` branch.
-
-The application can manually be deployed using `git` with the following procedure.
+The application can manually be deployed using the [Fly CLI](https://fly.io/docs/getting-started/installing-flyctl/) with the following procedure.
 
 First, prepare your environment for deployment. The following only needs to be done once on your current environment.
 
-1. Add a header to signal to Gigalixir that this should be a hot code deployment.
+1. Install the command line interface. For MacOS, you can install via the following:
 
 ```
-git config --worktree --add http.extraheader "GIGALIXIR-HOT: true" # enables hot-code reloading
+brew install flyctl
 ```
 
-2. Install the command line interface. For MacOS, you can install via the following:
+For other environments, refer to [this Guide](https://fly.io/docs/getting-started/installing-flyctl/)
+
+2. Log in to the command line.
 
 ```
-brew tap gigalixir/brew && brew install gigalixir
+flyctl auth login
 ```
 
-For other environments, refer to [this section in the Guide](https://gigalixir.readthedocs.io/en/latest/getting-started-guide.html#install-the-command-line-interface)
-
-3. Log in to the command line.
+Now, you are ready to deply via fly CLI!
 
 ```
-gigalixir login
+flyctl deploy
 ```
 
-4. Add the git remote with your account credentials.
-
-```
-gigalixir git:remote tatsu
-```
-
-5. Rename the remote to point to the environment.
-
-```
-git remote rename gigalixir production
-```
-
-6. Add your SSH public key so you can run migrations if necessary.
-
-```
-gigalixir account:ssh_keys:add "$(cat ~/.ssh/id_rsa.pub)"
-```
-
-Now, you are ready to deply via git!
-
-```
-git push production
-```
-
-You can run migrations with the following:
-
-```
-gigalixir ps:migrate
-```
-
-The production application lives at https://lebotski.gigalixirapp.com.
+The production application lives at https://lebotski.fly.dev/.
 
 ## CONTRIBUTING
 

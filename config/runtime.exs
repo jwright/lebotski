@@ -52,7 +52,7 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
-  host = System.get_env("PHX_HOST") || "example.com"
+  host = System.get_env("PHX_HOST") || "lebotski.com"
   port = String.to_integer(System.get_env("PORT") || "4000")
 
   config :lebotski, LebotskiWeb.Endpoint,
@@ -84,4 +84,37 @@ if config_env() == :prod do
   #     config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
+
+  slack_signing_secret =
+    System.get_env("SLACK_SIGNING_SECRET") ||
+      raise """
+      environment variable SLACK_SIGNING_SECRET is missing.
+      You can find it at https://api.slack.com/apps
+      """
+
+  slack_client_id =
+    System.get_env("SLACK_CLIENT_ID") ||
+      raise """
+      environment variable SLACK_CLIENT_ID is missing.
+      You can find it at https://api.slack.com/apps
+      """
+
+  slack_client_secret =
+    System.get_env("SLACK_CLIENT_SECRET") ||
+      raise """
+      environment variable SLACK_CLIENT_SECRET is missing.
+      You can find it at https://api.slack.com/apps
+      """
+
+  config :juvet,
+    endpoint: [
+      http: [port: port]
+    ],
+    slack: [
+      signing_secret: slack_signing_secret
+    ]
+
+  config :lebotski, Slack,
+    client_id: slack_client_id,
+    client_secret: slack_client_secret
 end

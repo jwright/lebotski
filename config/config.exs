@@ -49,12 +49,8 @@ config :phoenix, :json_library, Jason
 
 config :juvet,
   bot: Lebotski.Bot,
-  endpoint: [
-    http: [port: {:system, "PORT"}]
-  ],
   router: Lebotski.Bot.Router,
   slack: [
-    actions_endpoint: "/slack/actions",
     commands_endpoint: "/slack/commands",
     signing_secret: System.get_env("SLACK_SIGNING_SECRET")
   ]
