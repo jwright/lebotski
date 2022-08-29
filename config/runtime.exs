@@ -107,14 +107,10 @@ if config_env() == :prod do
       """
 
   config :juvet,
-    bot: Lebotski.Bot,
     endpoint: [
       http: [port: port]
     ],
-    router: Lebotski.Bot.Router,
     slack: [
-      actions_endpoint: "/slack/actions",
-      commands_endpoint: "/slack/commands",
       signing_secret: slack_signing_secret
     ]
 
